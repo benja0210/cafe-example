@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { label: "Menu", href: "#menu" },
-  { label: "About", href: "#about" },
-  { label: "Locations", href: "#locations" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Contact", href: "#contact" },
+  { label: "Menu", id: "menu" },
+  { label: "About", id: "about" },
+  { label: "Locations", id: "locations" },
+  { label: "Gallery", id: "gallery" },
+  { label: "Contact", id: "contact" },
 ];
 
 const Navbar = () => {
@@ -22,6 +22,16 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -34,7 +44,9 @@ const Navbar = () => {
         {/* Logo */}
         <a href="#" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full border border-gold/50 flex items-center justify-center">
-            <span className="text-gold font-display text-lg font-semibold">A</span>
+            <span className="text-gold font-display text-lg font-semibold">
+              A
+            </span>
           </div>
           <span className="font-display text-xl text-cream hidden sm:block">
             Aroma Café
@@ -44,13 +56,13 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <button
               key={link.label}
-              href={link.href}
+              onClick={() => scrollToSection(link.id)}
               className="text-cream/80 hover:text-gold transition-colors text-sm uppercase tracking-wider"
             >
               {link.label}
-            </a>
+            </button>
           ))}
         </nav>
 
@@ -60,7 +72,11 @@ const Navbar = () => {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
         </button>
       </div>
 
@@ -69,14 +85,16 @@ const Navbar = () => {
         <nav className="md:hidden bg-espresso/98 backdrop-blur-md border-t border-cream/10 mt-4">
           <div className="px-6 py-6 space-y-4">
             {navLinks.map((link) => (
-              <a
+              <button
                 key={link.label}
-                href={link.href}
-                className="block text-cream/80 hover:text-gold transition-colors text-sm uppercase tracking-wider py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  scrollToSection(link.id);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="block text-left w-full text-cream/80 hover:text-gold transition-colors text-sm uppercase tracking-wider py-2"
               >
                 {link.label}
-              </a>
+              </button>
             ))}
           </div>
         </nav>
